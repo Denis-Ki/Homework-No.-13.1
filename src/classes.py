@@ -1,4 +1,11 @@
 class Category:
+    """
+    Класс категорий товаров
+    name: название
+    description: описание
+    products: товары
+    """
+
     name: str
     description: str
     products: list
@@ -15,6 +22,14 @@ class Category:
 
 
 class Product:
+    """
+    Класс товаров
+    name: название
+    description: описание
+    price: цена
+    quantity: количество в наличии
+    """
+
     name: str
     description: str
     price: float
