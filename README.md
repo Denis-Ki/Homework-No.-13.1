@@ -1,5 +1,5 @@
-# Homework-No.-13.1
-Kichulkin Denis Homework-No.-13.1 (SkyPro)
+# Homework-modul No 13 OOP
+Kichulkin Denis Homework- modul No 13 OOP(SkyPro)
 
 ## Название проекта
 «Категории и Продукты»
@@ -7,6 +7,7 @@ Kichulkin Denis Homework-No.-13.1 (SkyPro)
 ### Описание проекта 
  Подгрузка данных по категориям и товарам из файла JSON. 
   и создание объектов классов Category и Product.
+  описание дополняется
 
 ### Технологии: 
 - python 3.8
