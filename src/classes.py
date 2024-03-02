@@ -3,7 +3,7 @@ class Category:
     Класс категорий товаров
     name: название
     description: описание
-    products: товары
+    products: товары(список объектов класса  Product)
     """
 
     name: str
@@ -13,22 +13,30 @@ class Category:
     category_quantity = 0
     unique_products = 0
 
-    def __init__(self, name, description, products):
+    def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.__products = products
+        self.__products = []
         Category.category_quantity += 1
-        Category.unique_products = len(set(products))
 
     def add_product(self, new_product):
-        self.__products.append(new_product)
-        Category.unique_products = len(set(self.__products))
+        """
+        Метод для добавления товара в категорию
+        """
+        if not isinstance(new_product, Product):
+            print("Ошибка: Неверный тип товара")
+            Category.unique_products = len(set(self.__products))
+            return
+        else:
+            self.__products.append(new_product)
+            Category.unique_products = len(set(self.__products))
 
     @property
     def products(self):
+        products_info = []
         for product in self.__products:
-            return f'{product.name}, {product.price} руб. Остаток: {product.quantity} шт.'
-
+            products_info.append(f'{product.name}, {product.price} руб. Остаток: {product.quantity} шт.')
+        return "\n".join(products_info)
 
 class Product:
     """
@@ -50,9 +58,9 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
-    @staticmethod
-    def create_product(name, description, price, quantity):
-        return Product(name, description, price, quantity)
+    @classmethod
+    def create_product(cls, name, description, price, quantity):
+        return cls(name, description, price, quantity)
 
     @property
     def price(self):
@@ -67,3 +75,12 @@ class Product:
 
 
 
+# # Создаем экземпляр класса Product
+# # product1 = Product.create_product("Товар 1", "Описание товара 1", 50.0, 20)
+# # product2 = Product.create_product("Товар 2", "Описание товара 2", 80.0, 15)
+# #
+# # # Создаем экземпляр класса Category и добавляем в него продукты
+# # category = Category("Категория 1", "Описание категории 1", [product1, product2])
+# #
+# # # Выводим информацию о продуктах в категории
+# # print(category.products)
