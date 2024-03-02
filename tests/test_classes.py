@@ -1,6 +1,6 @@
 import pytest
 from src.classes import Category, Product
-
+from unittest.mock import patch
 
 @pytest.fixture
 def empty_category():
@@ -69,13 +69,15 @@ def test_price_property():
 
 def test_set_price_valid():
     product = Product("Товар", "Описание товара", 50.0, 10)
-    product.price = 60.0
-    assert product.price == 60.0
+    with patch("builtins.input", return_value="y"):  # Имитируем ввод пользователя 'y'
+        product.price = 40.0
+    assert product.price == 40.0
 
 
 def test_set_price_invalid():
     product = Product("Товар", "Описание товара", 50.0, 10)
-    product.price = -10.0
+    with patch("builtins.input", return_value="n"):  # Имитируем ввод пользователя 'n'
+        product.price = 40.0
     assert product.price == 50.0
 
 
