@@ -3,25 +3,81 @@ from src.classes import Category, Product
 
 
 @pytest.fixture
-def category_electronics():
-    return Category('Электроника', 'Изделия электронной промышленности', ['телевизор', 'сотовый телефон', 'наушники', 'телевизор'])
+def empty_category():
+    return Category("Категория", "Описание")
 
 
 @pytest.fixture
-def products_mobile():
-    return Product('Iphone SE', 'Смартфоны, сотовые телефоны', 19500.50, 6)
+def sample_product():
+    return Product.create_product("Товар", "Описание товара", 50.0, 10)
 
 
-def test_category_init(category_electronics):
-    assert category_electronics.name == 'Электроника'
-    assert category_electronics.description == 'Изделия электронной промышленности'
-    assert category_electronics.products == ['телевизор', 'сотовый телефон', 'наушники', 'телевизор']
+def test_category_init(empty_category):
+    assert empty_category.name == "Категория"
+    assert empty_category.description == "Описание"
+    assert empty_category._Category__products == []
     assert Category.category_quantity == 1
-    assert Category.unique_products == 3
+    assert Category.unique_products == 0
 
 
-def test_product_init(products_mobile):
-    assert products_mobile.name == 'Iphone SE'
-    assert products_mobile.description == 'Смартфоны, сотовые телефоны'
-    assert products_mobile.price == 19500.50
-    assert products_mobile.quantity == 6
+def test_add_product_valid(empty_category, sample_product):
+    empty_category.add_product(sample_product)
+    assert empty_category._Category__products == [sample_product]
+    assert Category.unique_products == 1
+
+
+def test_add_product_invalid_type(empty_category):
+    non_product = "Не продукт"
+    empty_category.add_product(non_product)
+    assert empty_category._Category__products == []
+    assert Category.unique_products == 0
+
+
+def test_products_property_empty_category(empty_category):
+    assert empty_category.products == ""
+
+
+def test_products_property_with_products(empty_category, sample_product):
+    product1 = Product.create_product("Товар 1", "Описание товара 1", 50.0, 20)
+    product2 = Product.create_product("Товар 2", "Описание товара 2", 80.0, 15)
+    empty_category.add_product(product1)
+    empty_category.add_product(product2)
+    assert empty_category.products == "Товар 1, 50.0 руб. Остаток: 20 шт.\nТовар 2, 80.0 руб. Остаток: 15 шт."
+
+
+def test_product_init():
+    product = Product("Товар", "Описание товара", 50.0, 10)
+    assert product.name == "Товар"
+    assert product.description == "Описание товара"
+    assert product._Product__price == 50.0
+    assert product.quantity == 10
+
+
+def test_create_product_classmethod():
+    product = Product.create_product("Товар", "Описание товара", 50.0, 10)
+    assert isinstance(product, Product)
+    assert product.name == "Товар"
+    assert product.description == "Описание товара"
+    assert product._Product__price == 50.0
+    assert product.quantity == 10
+
+
+def test_price_property():
+    product = Product("Товар", "Описание товара", 50.0, 10)
+    assert product.price == 50.0
+
+
+def test_set_price_valid():
+    product = Product("Товар", "Описание товара", 50.0, 10)
+    product.price = 60.0
+    assert product.price == 60.0
+
+
+def test_set_price_invalid():
+    product = Product("Товар", "Описание товара", 50.0, 10)
+    product.price = -10.0
+    assert product.price == 50.0
+
+
+if __name__ == "__main__":
+    pytest.main()
