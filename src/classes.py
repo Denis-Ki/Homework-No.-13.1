@@ -19,6 +19,12 @@ class Category:
         self.__products = []
         Category.category_quantity += 1
 
+    def __str__(self):
+        return f'{self.name}, количество продуктов: {len(self)} шт.'
+
+    def __len__(self):
+        return len(self.__products)
+
     def add_product(self, new_product):
         """
         Метод для добавления товара в категорию
@@ -35,8 +41,9 @@ class Category:
     def products(self):
         products_info = []
         for product in self.__products:
-            products_info.append(f'{product.name}, {product.price} руб. Остаток: {product.quantity} шт.')
+            products_info.append(str(product))
         return "\n".join(products_info)
+
 
 class Product:
     """
@@ -57,6 +64,12 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+
+    def __str__(self):
+        return f'{self.name}, {self.price} руб. Остаток: {self.quantity} шт.'
+
+    def __add__(self, other):
+        return (self.price*self.quantity) + (other.price*other.quantity)
 
     @classmethod
     def create_product(cls, name, description, price, quantity, existing_products=None):

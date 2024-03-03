@@ -45,12 +45,11 @@ def test_products_property_with_products(empty_category, sample_product):
     assert empty_category.products == "Товар 1, 50.0 руб. Остаток: 20 шт.\nТовар 2, 80.0 руб. Остаток: 15 шт."
 
 
-def test_product_init():
-    product = Product("Товар", "Описание товара", 50.0, 10)
-    assert product.name == "Товар"
-    assert product.description == "Описание товара"
-    assert product._Product__price == 50.0
-    assert product.quantity == 10
+def test_product_init(sample_product):
+    assert sample_product.name == "Товар"
+    assert sample_product.description == "Описание товара"
+    assert sample_product._Product__price == 50.0
+    assert sample_product.quantity == 10
 
 
 def test_create_product_classmethod():
@@ -62,23 +61,38 @@ def test_create_product_classmethod():
     assert product.quantity == 10
 
 
-def test_price_property():
-    product = Product("Товар", "Описание товара", 50.0, 10)
-    assert product.price == 50.0
+def test_price_property(sample_product):
+    assert sample_product.price == 50.0
 
 
-def test_set_price_valid():
-    product = Product("Товар", "Описание товара", 50.0, 10)
+def test_set_price_valid(sample_product):
     with patch("builtins.input", return_value="y"):  # Имитируем ввод пользователя 'y'
-        product.price = 40.0
-    assert product.price == 40.0
+        sample_product.price = 40.0
+    assert sample_product.price == 40.0
 
 
-def test_set_price_invalid():
-    product = Product("Товар", "Описание товара", 50.0, 10)
+def test_set_price_invalid(sample_product):
     with patch("builtins.input", return_value="n"):  # Имитируем ввод пользователя 'n'
-        product.price = 40.0
-    assert product.price == 50.0
+        sample_product.price = 40.0
+    assert sample_product.price == 50.0
+
+
+def test_str_product(sample_product):
+    assert str(sample_product) == "Товар, 50.0 руб. Остаток: 10 шт."
+
+
+def test_str_category(empty_category):
+    product1 = Product.create_product("Товар 1", "Описание товара 1", 50.0, 20)
+    product2 = Product.create_product("Товар 2", "Описание товара 2", 80.0, 15)
+    empty_category.add_product(product1)
+    empty_category.add_product(product2)
+    assert str(empty_category) == "Категория, количество продуктов: 2 шт."
+
+
+def test__add__product():
+    product1 = Product.create_product("Товар 1", "Описание товара 1", 50.0, 20)
+    product2 = Product.create_product("Товар 2", "Описание товара 2", 80.0, 15)
+    assert product1 + product2 == 50.0 * 20 + 80.0 * 15
 
 
 if __name__ == "__main__":
