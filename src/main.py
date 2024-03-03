@@ -21,7 +21,8 @@ def main():
             product = Product(product_data['name'], product_data['description'], product_data['price'], product_data['quantity'])
             category.add_product(product)
 
-        print(f'{category.name}\n{category.description}\n{category.products}')
+        #print(f'{category.name}\n{category.description}\n{category.products}')
+        print(category)
         categories.append(category)
 
 
