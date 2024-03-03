@@ -52,24 +52,29 @@ class Product:
     description: описание
     price: цена
     quantity: количество в наличии
+    color: str
     """
 
     name: str
     description: str
     price: float
     quantity: int
+    color: str
 
-    def __init__(self, name, description, price, quantity):
+    def __init__(self, name, description, price, quantity, color=None):
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
+        self.color = color
 
     def __str__(self):
         return f'{self.name}, {self.price} руб. Остаток: {self.quantity} шт.'
 
     def __add__(self, other):
-        return (self.price*self.quantity) + (other.price*other.quantity)
+        if type(self) == type(other):
+            return (self.price*self.quantity) + (other.price*other.quantity)
+        raise TypeError
 
     @classmethod
     def create_product(cls, name, description, price, quantity, existing_products=None):
@@ -105,6 +110,40 @@ class Product:
             if confirmation.lower() == 'n':
                 return
         self.__price = value
+
+
+class Smartphone(Product):
+
+    def __init__(self, name, description, price, quantity, color, performance, model, memory):
+        super().__init__(name, description, price, quantity, color)
+        self.performance = performance
+        self.model = model
+        self.memory = memory
+
+
+class LawnGrass(Product):
+
+    def __init__(self, name, description, price, quantity, color, country, period):
+        super().__init__(name, description, price, quantity, color)
+        self.country = country
+        self.period = period
+
+
+# class ProductIterator:
+#     """
+#         Класс для перебора товаров одной категории
+#         category: объект Category
+#     """
+#     category: Category
+#
+#     def __init__(self, category):
+#         self.category = category
+#
+#     def __iter__(self):
+#         pass
+#
+#     def __next__(self):
+#         pass
 
 
 
