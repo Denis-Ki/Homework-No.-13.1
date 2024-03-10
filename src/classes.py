@@ -1,4 +1,8 @@
-class Category:
+from src.abstract_classes import Prod
+from src.mixins import MixinInfo
+
+
+class Category(MixinInfo):
     """
     Класс категорий товаров
     name: название
@@ -17,6 +21,7 @@ class Category:
         self.name = name
         self.description = description
         self.__products = []
+        MixinInfo.__init__(self)
         Category.category_quantity += 1
 
     def __str__(self):
@@ -39,20 +44,23 @@ class Category:
 
     @property
     def products(self):
+        """
+        Метод для вывода информации о товаре
+        """
         products_info = []
         for product in self.__products:
             products_info.append(str(product))
         return "\n".join(products_info)
 
 
-class Product:
+class Product(Prod, MixinInfo):
     """
     Класс товаров
     name: название
     description: описание
     price: цена
     quantity: количество в наличии
-    color: str
+    color: цвет
     """
 
     name: str
@@ -67,6 +75,7 @@ class Product:
         self.__price = price
         self.quantity = quantity
         self.color = color
+        MixinInfo.__init__(self)
 
     def __str__(self):
         return f'{self.name}, {self.price} руб. Остаток: {self.quantity} шт.'
@@ -113,37 +122,51 @@ class Product:
 
 
 class Smartphone(Product):
+    """
+    Класс смартфон (наследуется от класса Product)
+    name: название
+    description: описание
+    price: цена
+    quantity: количество в наличии
+    color: цвет
+    performance: производительность
+    model: модель
+    memory: объём памяти
+    """
 
     def __init__(self, name, description, price, quantity, color, performance, model, memory):
-        super().__init__(name, description, price, quantity, color)
         self.performance = performance
         self.model = model
         self.memory = memory
+        super().__init__(name, description, price, quantity, color)
+
 
 
 class LawnGrass(Product):
+    """
+    Класс трава газонная (наследуется от класса Product)
+    name: название
+    description: описание
+    price: цена
+    quantity: количество в наличии
+    color: цвет
+    country: страна-производитель
+    period: срок прорастания
+    """
 
     def __init__(self, name, description, price, quantity, color, country, period):
-        super().__init__(name, description, price, quantity, color)
         self.country = country
         self.period = period
+        super().__init__(name, description, price, quantity, color)
 
 
-# class ProductIterator:
-#     """
-#         Класс для перебора товаров одной категории
-#         category: объект Category
-#     """
-#     category: Category
+# class Order:
 #
-#     def __init__(self, category):
-#         self.category = category
-#
-#     def __iter__(self):
+#     def __init__(self):
 #         pass
 #
-#     def __next__(self):
-#         pass
 
-
-
+# prod1 = Product("Товар 1", "Описание товара 1", 50.0, 20)
+# smart1 = Smartphone("Смартфон", "Описание товара", 60.0, 20, "синий", 100, "A120", "128 Mb")
+# grass1 = LawnGrass("Трава", "Описание травы", 1.0, 10, "зеленая", "Голландия", "10 дней")
+# category1 = Category("Категория", "Описание")
