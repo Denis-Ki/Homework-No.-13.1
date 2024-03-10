@@ -127,5 +127,23 @@ def test_lawn_grass_init(lawn_grass_product):
     assert lawn_grass_product.period == "10 дней"
 
 
+def test_value_error(empty_category):
+    '''
+    тест исключения ValueError при добавлении товара с 0 количеством
+    '''
+    with pytest.raises(ValueError, match='Товар с нулевым количеством не может быть добавлен'):
+        prod1 = Product("Товар 1", "Описание товара 1", 50.0, 0)
+        empty_category.add_product(prod1)
+
+
+def test_average_price(empty_category, sample_product):
+    '''
+    тест метода подсчета среднего ценника
+    '''
+    assert empty_category.average_price() == 0
+    empty_category.add_product(sample_product)
+    assert empty_category.average_price() == 50.0
+
+
 if __name__ == "__main__":
     pytest.main()

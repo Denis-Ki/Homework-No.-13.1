@@ -38,6 +38,8 @@ class Category(MixinInfo):
             print("Ошибка: Неверный тип товара")
             Category.unique_products = len(set(self.__products))
             return
+        elif new_product.quantity == 0:
+            raise ValueError('Товар с нулевым количеством не может быть добавлен')
         else:
             self.__products.append(new_product)
             Category.unique_products = len(set(self.__products))
@@ -51,6 +53,23 @@ class Category(MixinInfo):
         for product in self.__products:
             products_info.append(str(product))
         return "\n".join(products_info)
+
+    def average_price(self):
+        '''
+        метод, который подсчитывает средний ценник всех товаров
+        исключение - когда в категории нет товаров и сумма всех товаров будет делиться на ноль.
+        в случае, если такое происходит, возвращает ноль
+        '''
+        sum_price = 0
+        for product in self.__products:
+            sum_price += product.price
+        try:
+            average_price = sum_price / len(self.__products)
+        except ZeroDivisionError:
+            average_price = 0
+            return average_price
+        else:
+            return average_price
 
 
 class Product(Prod, MixinInfo):
@@ -166,7 +185,11 @@ class LawnGrass(Product):
 #         pass
 #
 
-# prod1 = Product("Товар 1", "Описание товара 1", 50.0, 20)
-# smart1 = Smartphone("Смартфон", "Описание товара", 60.0, 20, "синий", 100, "A120", "128 Mb")
-# grass1 = LawnGrass("Трава", "Описание травы", 1.0, 10, "зеленая", "Голландия", "10 дней")
+# prod1 = Product("Товар 1", "Описание товара 1", 50.0, 2)
+# prod2 = Product("Товар 2", "Описание товара 2", 60.0, 2)
+# # smart1 = Smartphone("Смартфон", "Описание товара", 60.0, 20, "синий", 100, "A120", "128 Mb")
+# # grass1 = LawnGrass("Трава", "Описание травы", 1.0, 10, "зеленая", "Голландия", "10 дней")
 # category1 = Category("Категория", "Описание")
+# category1.add_product(prod1)
+# category1.add_product(prod2)
+# print(category1.average_price())
